@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <style>
+        body{font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        transition: background-color 0.5s ease;
+        }
+        #todo-container{
+            max-width: 400px;
+            width: 100%;
+            background-color: #34495e;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        #todo-list{
+            list-style: none;
+            padding:0;
+        }
+        #task-input{
+            flex: 1;
+            padding: 8;
+            border:1px solid #2c3e50;
+            border-radius: 5px;
+            margin-right: 10px;
+            color:#2c3e50;
+            background-color: #ecf0f1;
+        }
+        #new-task{display: flex;
+        margin-top: 20px;}
+        #new-task button{
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+
+        }
+        #new-task button:hover{
+            background-color: #2980b9;
+        }
+        .task{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #2c3e50;
+            padding: 10px 0;
+            transition: background-color 0.3s ease;
+        }
+        .task:hover{background-color: #2c3e50;}
+        .task input[type="checkbox"]{margin-right: 10px;}
+        .task button{
+            background-color: #e74c3c;
+            color: #ffffff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .task button:hover{
+            background-color: #c0392b;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="todo-container">
+        <h1>To DO List</h1>
+        <ul id="todo-list"></ul>
+        <div id="new-task">
+            <input type="text" id="task-input" placeholder="Enter New Task here..."/>
+            <button onclick="addTask()">Add</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded",()=>{
+            loadTask();// we will write it soon, keep following...
+        })
+        function loadTask(){
+            const taskList=document.querySelector('#todo-list');
+            const task=localStorage.getItem("task");
+            if(task){taskList.innerHTML=task;}
+        }
+        function saveTasks(){
+            const taskList=document.querySelector('#todo-list');
+            const task=taskList.innerHTML;
+
+            localStorage.setItem("task",task);
+        }
+        function removeTask(button){
+            const taskList=document.querySelector('#todo-list');
+            const taskElement=button.parentNode;
+            taskList.removeChild(taskElement);
+            // finally save the document in local storage.
+            saveTasks();
+        }
+        function addTask(){
+            const taskInput=document.querySelector('#task-input');
+            const taskText=taskInput.value.trim();
+
+            if(taskText===""){return;//you can alert or inform user about no data fed in form ..
+            }
+            const taskList=document.querySelector('#todo-list');
+            const taskElement=document.createElement("li");
+            taskElement.className="task";
+            taskElement.innerHTML=`
+            <input type="checkbox">
+            <span>${taskText}</span>
+            <button onclick="removeTask(this)">Remove</button>
+            `;
+
+            taskList.appendChild(taskElement);
+            saveTasks();
+            taskInput.value="";
+        }
+
+
+    </script>
+</body>
+</html>

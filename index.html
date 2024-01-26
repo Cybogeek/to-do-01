@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List App</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #todo-container {
+      max-width: 400px;
+      width: 100%;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    #todo-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .task {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .task input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .task button {
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .task button:hover {
+      background-color: #c0392b;
+    }
+
+    #new-task {
+      display: flex;
+      margin-top: 20px;
+    }
+
+    #new-task input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    #new-task button {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    #new-task button:hover {
+      background-color: #2980b9;
+    }
+
+    #nav {
+      padding: 15px;
+    }
+
+    #nav a {
+      text-decoration: none;
+      margin-top: 5px;
+      font-weight: 600;
+      color: #3498db;
+      transition: color 0.3s ease-in-out;
+    }
+    #nav a:hover{
+      color: #c0392b;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="todo-container">
+    <h1>To-Do List</h1>
+    <ul id="todo-list"></ul>
+    <div id="new-task">
+      <input type="text" id="task-input" placeholder="New task...">
+      <button onclick="addTask()">Add</button>
+    </div>
+    <div id="nav"><a href="todo_dark.html" target="_blank">Dark Version</a></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Load tasks from local storage
+      loadTasks();
+    });
+
+    function addTask() {
+      const taskInput = document.getElementById("task-input");
+      const taskText = taskInput.value.trim();
+
+      if (taskText === "") {
+        return;
+      }
+
+      const taskList = document.getElementById("todo-list");
+
+      // Create task element
+      const taskElement = document.createElement("li");
+      taskElement.className = "task";
+      taskElement.innerHTML = `
+        <input type="checkbox">
+        <span>${taskText}</span>
+        <button onclick="removeTask(this)">Remove</button>
+      `;
+
+      // Add task to the list
+      taskList.appendChild(taskElement);
+
+      // Save tasks to local storage
+      saveTasks();
+
+      // Clear input field
+      taskInput.value = "";
+    }
+
+    function removeTask(button) {
+      const taskList = document.getElementById("todo-list");
+      const taskElement = button.parentNode;
+      taskList.removeChild(taskElement);
+
+      // Save tasks to local storage
+      saveTasks();
+    }
+
+    function saveTasks() {
+      const taskList = document.getElementById("todo-list");
+      const tasks = taskList.innerHTML;
+      localStorage.setItem("tasks", tasks);
+    }
+
+    function loadTasks() {
+      const taskList = document.getElementById("todo-list");
+      const savedTasks = localStorage.getItem("tasks");
+      if (savedTasks) {
+        taskList.innerHTML = savedTasks;
+      }
+    }
+  </script>
+</body>
+
+</html>
